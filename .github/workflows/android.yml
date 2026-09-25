@@ -22,6 +22,7 @@ jobs:
           sudo chmod 666 /dev/kvm
       - name: Start emulator and test
         run: |
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
           sdkmanager "system-images;android-29;default;x86_64" "platform-tools" "emulator"
           echo no | avdmanager create avd -n test -k "system-images;android-29;default;x86_64" --force
           "$ANDROID_HOME/emulator/emulator" -avd test -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot > emulator.log 2>&1 &
