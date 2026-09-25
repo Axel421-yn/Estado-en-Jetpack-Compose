@@ -25,12 +25,14 @@ jobs:
           export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
           sdkmanager "system-images;android-29;default;x86_64" "platform-tools" "emulator"
           echo no | avdmanager create avd -n test -k "system-images;android-29;default;x86_64" --force
-          "$ANDROID_HOME/emulator/emulator" -avd test -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot > emulator.log 2>&1 &
-          adb wait-for-device
+          "$ANDROID_HOME/emulator/emulator" -avd test -no-window -no-audio -no-boot-anim -gpu swiftshader -no-snapshot > emulator.log 2>&1 &
+          trap 'cat emulator.log' EXIT
+          timeout 180 adb wait-for-device
           for i in $(seq 1 180); do
             [ "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1" ] && break
             sleep 2
           done
+          test "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1"
           adb shell input keyevent 82
           ./gradlew connectedDebugAndroidTest
       - name: Collect evidence
