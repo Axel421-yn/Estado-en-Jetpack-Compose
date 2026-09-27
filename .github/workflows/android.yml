@@ -37,12 +37,12 @@ jobs:
           done
           test "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1"
           adb shell input keyevent 82
-          ./gradlew connectedDebugAndroidTest
+          ./gradlew connectedDebugAndroidTest -Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true
       - name: Collect evidence
         if: always()
         run: |
           mkdir -p evidence
-          adb pull /sdcard/Android/data/com.codelabs.basicstatecodelab/files/evidencias evidence/ || true
+          adb pull /sdcard/Android/data/com.codelabs.basicstatecodelab/files/evidencias evidence/
       - uses: actions/upload-artifact@v4
         if: always()
         with:
