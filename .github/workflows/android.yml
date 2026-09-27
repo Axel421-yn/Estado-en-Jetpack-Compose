@@ -42,7 +42,7 @@ jobs:
         if: always()
         run: |
           mkdir -p evidence
-          adb pull /sdcard/Android/data/com.codelabs.basicstatecodelab/files/evidencias evidence/
+          "$ANDROID_HOME/platform-tools/adb" pull /sdcard/Android/data/com.codelabs.basicstatecodelab/files/evidencias evidence/
       - uses: actions/upload-artifact@v4
         if: always()
         with:
